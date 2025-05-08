@@ -5,6 +5,21 @@
 This project explores the use of Support Vector Machines (SVM) with linear, polynomial, and radial (RBF) kernels to predict diabetes status using demographic and lifestyle variables from the National Health Interview Survey (NHIS, via IPUMS). The objective is to evaluate how health behaviors and demographic factors relate to diabetes risk, and to compare the predictive performance and clinical utility of different SVM kernels.
 
 ---
+## Project Question
+
+Can we accurately predict the presence of diabetes in adults using demographic and lifestyle variables from the NHIS, and how do different SVM kernel choices (linear, polynomial, radial) affect prediction performance and clinical utility?
+
+---
+## Data
+
+- **Source:** [IPUMS Health Surveys: National Health Interview Survey](https://doi.org/10.18128/D070.V7.4)
+- **Variables Used:**
+  - Demographics: Age, BMI (BMICALC)
+  - Behaviors: Sleep hours (HRSLEEP), Cigarettes per month (CIGDAYMO)
+  - Engineered features: BMI × Age interaction
+  - **Target:** Doctor-diagnosed diabetes (`DIABETICEV`)
+
+---
 
 ## Technical Background
 
@@ -18,22 +33,7 @@ Support Vector Machines (SVMs) are supervised machine learning models used for c
 
 ---
 
-## Project Question
 
-Can we accurately predict the presence of diabetes in adults using demographic and lifestyle variables from the NHIS, and how do different SVM kernel choices (linear, polynomial, radial) affect prediction performance and clinical utility?
-
----
-
-## Data
-
-- **Source:** [IPUMS Health Surveys: National Health Interview Survey](https://doi.org/10.18128/D070.V7.4)
-- **Variables Used:**
-  - Demographics: Age, BMI (BMICALC)
-  - Behaviors: Sleep hours (HRSLEEP), Cigarettes per month (CIGDAYMO)
-  - Engineered features: BMI × Age interaction
-  - **Target:** Doctor-diagnosed diabetes (`DIABETICEV`)
-
----
 
 ## Methods
 
@@ -72,13 +72,45 @@ Can we accurately predict the presence of diabetes in adults using demographic a
 - Decision boundary plots (BMI vs. Age)
 
 ---
+### Interpretation: Impact of Habits, Metrics, and Demographics
 
-## Conclusions
+### Which habits and metrics impact diabetes risk?
+- **BMI × Age interaction** is the most influential predictor in all SVM models. This means older adults with higher BMI are at significantly greater risk for diabetes-a finding that matches clinical knowledge and public health research. 
+- **BMI alone** is also a strong predictor, confirming that obesity is a major modifiable risk factor.
+- **Smoking (CIGDAYMO)** and **Sleep (HRSLEEP)** had lower importance in this dataset. This may be due to limited detail in the NHIS survey (e.g., no pack-years or sleep quality), or because their effects on diabetes are partly mediated through BMI.
 
-- **Linear SVM** is the best choice for diabetes screening in this dataset, as it maximizes recall and minimizes missed cases, despite more false positives.
-- **Polynomial and RBF SVMs** offer higher accuracy and fewer false positives, but at the cost of missing most diabetes cases-a critical issue for screening.
-- **Clinical Implication:** For public health screening, sensitivity (recall) is more important than overall accuracy or precision. The linear kernel is preferable for this application.
+### Why do demographic and social factors make sense as predictors?
+- **Age** is a critical non-modifiable risk factor. The strong interaction with BMI in your model reflects how metabolic risk increases with age.
+- **Social determinants of health (SDOH)** such as income, education, and neighborhood environment are not included in this analysis but are known from the literature to significantly affect diabetes risk. Including such variables in future models could improve prediction and help address health disparities.
 
+### Policy and Public Health Implications
+- **Targeted screening:** The results support prioritizing BMI and age-based diabetes screening, especially for adults over 40.
+- **Resource allocation:** Linear SVM’s high recall (78%) means it can help flag high-risk individuals for further testing, making it a useful tool in public health clinics.
+- **Data modernization:** For even better prediction, future surveys should collect more detailed behavioral and social data (e.g., food access, sleep quality, smoking duration).
+
+### Study Impact
+- This project demonstrates that simple, interpretable models using basic survey data can effectively identify high-risk groups for diabetes.
+- The approach can be adapted to other chronic diseases and can inform policy and prevention strategies at the community level.
+
+### Conclusions
+
+- **Linear SVM** is preferred for diabetes screening due to its **high recall (78%)**, minimizing missed cases.
+
+- **BMI × Age interaction** is the most important predictor, highlighting the need for **age-specific weight management policies**.
+
+- For screening, **sensitivity (recall)** is more critical than precision or overall accuracy.
+
+- **Policy suggestion**:  
+  Implement targeted diabetes screening and prevention programs for **older adults with high BMI**, and support **data modernization** for more granular behavioral metrics.
+
+- **Limitations**:  
+  Limited feature set and potential for high false positives.  
+  Future work should include **more variables** and explore **ensemble models**.
+---
+## Future Work
+
+- Explore additional health outcomes (cancer, heart disease, stroke, etc.)
+- Incorporate more behavioral and socioeconomic variables
 ---
 
 ## How to Run
@@ -86,6 +118,7 @@ Can we accurately predict the presence of diabetes in adults using demographic a
 1. Clone the repository and install dependencies (see `requirements.txt`).
 2. Place the cleaned NHIS data CSV in the `data/` directory.
 3. Run the Jupyter notebooks in order:
+    - `01_eda.ipynb`
     - `02_linear_kernel.ipynb`
     - `03_polynomial_kernel.ipynb`
     - `04_radial_kernel.ipynb`
@@ -115,9 +148,6 @@ svm_health_behavior_prediction/
 ```
 ---
 
-## Future Work
 
-- Explore additional health outcomes (cancer, heart disease, stroke, etc.)
-- Incorporate more behavioral and socioeconomic variables
 
 
